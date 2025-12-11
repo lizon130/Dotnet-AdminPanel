@@ -1,0 +1,593 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container-fluid py-4">
+    <!-- WELCOME HEADER -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-gradient-primary text-white shadow">
+                <div class="card-body p-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h1 class="h3 mb-2">Welcome back, @Context.Session.GetString("UserName")! 👋</h1>
+                            <p class="mb-0 opacity-75">
+                                Here's what's happening with your store today.
+                                @if (DateTime.Now.Hour < 12)
+                                {
+                                    <span>Good morning! ☀️</span>
+                                }
+                                else if (DateTime.Now.Hour < 18)
+                                {
+                                    <span>Good afternoon! 🌤️</span>
+                                }
+                                else
+                                {
+                                    <span>Good evening! 🌙</span>
+                                }
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <div class="d-inline-block bg-white text-primary rounded-pill px-4 py-2">
+                                <i class="fas fa-calendar-alt me-2"></i>
+                                @DateTime.Now.ToString("dddd, MMMM dd, yyyy")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QUICK STATS CARDS -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs fw-bold text-primary text-uppercase mb-1">
+                                Total Products
+                            </div>
+                            <div class="h5 mb-0 fw-bold text-gray-800">@(ViewBag.TotalProducts ?? "0")</div>
+                            <div class="mt-2">
+                                <span class="badge bg-success">
+                                    <i class="fas fa-arrow-up me-1"></i> 12%
+                                </span>
+                                <span class="text-muted small ms-2">From last month</span>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-box fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0 py-2">
+                    <a asp-controller="Products" asp-action="Index" class="text-decoration-none small">
+                        View all products <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs fw-bold text-success text-uppercase mb-1">
+                                Total Users
+                            </div>
+                            <div class="h5 mb-0 fw-bold text-gray-800">@(ViewBag.TotalUsers ?? "0")</div>
+                            <div class="mt-2">
+                                <span class="badge bg-info">
+                                    <i class="fas fa-user-plus me-1"></i> New
+                                </span>
+                                <span class="text-muted small ms-2">Active accounts</span>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-users fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0 py-2">
+                    <a href="#" class="text-decoration-none small">
+                        Manage users <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs fw-bold text-warning text-uppercase mb-1">
+                                Pending Tasks
+                            </div>
+                            <div class="h5 mb-0 fw-bold text-gray-800">@(ViewBag.PendingTasks ?? "3")</div>
+                            <div class="mt-2">
+                                <span class="badge bg-danger">High Priority</span>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-tasks fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0 py-2">
+                    <a href="#" class="text-decoration-none small">
+                        View tasks <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs fw-bold text-info text-uppercase mb-1">
+                                Revenue This Month
+                            </div>
+                            <div class="h5 mb-0 fw-bold text-gray-800">$@(ViewBag.Revenue ?? "2,540")</div>
+                            <div class="mt-2">
+                                <span class="badge bg-success">
+                                    <i class="fas fa-arrow-up me-1"></i> 24%
+                                </span>
+                                <span class="text-muted small ms-2">From last month</span>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0 py-2">
+                    <a href="#" class="text-decoration-none small">
+                        View reports <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CHARTS & GRAPHS SECTION -->
+    <div class="row mb-4">
+        <div class="col-xl-8 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 fw-bold text-primary">Sales Overview</h6>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button"
+                                data-bs-toggle="dropdown">
+                            This Month
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">This Week</a></li>
+                            <li><a class="dropdown-item" href="#">This Month</a></li>
+                            <li><a class="dropdown-item" href="#">This Year</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Simple Chart (You can replace with real chart library) -->
+                    <div class="chart-container" style="height: 300px;">
+                        <canvas id="salesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 fw-bold text-primary">Top Categories</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Electronics</span>
+                            <span class="fw-bold">35%</span>
+                        </div>
+                        <div class="progress" style="height: 10px;">
+                            <div class="progress-bar bg-primary" style="width: 35%"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Clothing</span>
+                            <span class="fw-bold">25%</span>
+                        </div>
+                        <div class="progress" style="height: 10px;">
+                            <div class="progress-bar bg-success" style="width: 25%"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Home & Garden</span>
+                            <span class="fw-bold">20%</span>
+                        </div>
+                        <div class="progress" style="height: 10px;">
+                            <div class="progress-bar bg-warning" style="width: 20%"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Books</span>
+                            <span class="fw-bold">15%</span>
+                        </div>
+                        <div class="progress" style="height: 10px;">
+                            <div class="progress-bar bg-info" style="width: 15%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Others</span>
+                            <span class="fw-bold">5%</span>
+                        </div>
+                        <div class="progress" style="height: 10px;">
+                            <div class="progress-bar bg-secondary" style="width: 5%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RECENT ACTIVITY & QUICK ACTIONS -->
+    <div class="row">
+        <!-- Recent Products -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 fw-bold text-primary">Recent Products</h6>
+                    <a asp-controller="Products" asp-action="Create" class="btn btn-sm btn-primary">
+                        <i class="fas fa-plus me-1"></i> Add New
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (ViewBag.RecentProducts != null)
+                                {
+                                    foreach (var product in ViewBag.RecentProducts as List<ProductApp.Models.Product>)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="bg-light rounded p-2 me-3">
+                                                        <i class="fas fa-box text-primary"></i>
+                                                    </div>
+                                                    <div>
+                                                        <div class="fw-bold">@product.Name</div>
+                                                        <small class="text-muted">Added @product.CreatedAt.ToString("MMM dd")</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>$@product.Price</td>
+                                            <td>
+                                                <span class="badge bg-success">In Stock</span>
+                                            </td>
+                                            <td>
+                                                <a href="#" class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted py-4">
+                                            <i class="fas fa-box-open fa-2x mb-2"></i>
+                                            <p>No products yet. <a asp-controller="Products" asp-action="Create">Add your first product</a></p>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions & System Status -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 fw-bold text-primary">Quick Actions</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="card bg-light border-0 h-100">
+                                <div class="card-body text-center p-4">
+                                    <div class="bg-primary rounded-circle p-3 d-inline-block mb-3">
+                                        <i class="fas fa-plus fa-2x text-white"></i>
+                                    </div>
+                                    <h5 class="card-title">Add Product</h5>
+                                    <p class="card-text text-muted small">Add new items to your store</p>
+                                    <a asp-controller="Products" asp-action="Create" class="btn btn-primary mt-2">
+                                        Get Started
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-light border-0 h-100">
+                                <div class="card-body text-center p-4">
+                                    <div class="bg-success rounded-circle p-3 d-inline-block mb-3">
+                                        <i class="fas fa-chart-line fa-2x text-white"></i>
+                                    </div>
+                                    <h5 class="card-title">View Reports</h5>
+                                    <p class="card-text text-muted small">Check sales and analytics</p>
+                                    <a href="#" class="btn btn-success mt-2">
+                                        View Reports
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-light border-0 h-100">
+                                <div class="card-body text-center p-4">
+                                    <div class="bg-warning rounded-circle p-3 d-inline-block mb-3">
+                                        <i class="fas fa-cog fa-2x text-white"></i>
+                                    </div>
+                                    <h5 class="card-title">Settings</h5>
+                                    <p class="card-text text-muted small">Manage store settings</p>
+                                    <a asp-controller="Settings" asp-action="Index" class="btn btn-warning mt-2">
+                                        Configure
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-light border-0 h-100">
+                                <div class="card-body text-center p-4">
+                                    <div class="bg-info rounded-circle p-3 d-inline-block mb-3">
+                                        <i class="fas fa-users fa-2x text-white"></i>
+                                    </div>
+                                    <h5 class="card-title">Users</h5>
+                                    <p class="card-text text-muted small">Manage user accounts</p>
+                                    <a href="#" class="btn btn-info mt-2">
+                                        Manage Users
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SYSTEM STATUS -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 fw-bold text-primary">System Status</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 text-center mb-3">
+                            <div class="p-3 border rounded">
+                                <i class="fas fa-server fa-2x text-success mb-2"></i>
+                                <h6>Server Status</h6>
+                                <span class="badge bg-success">Online</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3 text-center mb-3">
+                            <div class="p-3 border rounded">
+                                <i class="fas fa-database fa-2x text-primary mb-2"></i>
+                                <h6>Database</h6>
+                                <span class="badge bg-primary">Connected</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3 text-center mb-3">
+                            <div class="p-3 border rounded">
+                                <i class="fas fa-shield-alt fa-2x text-warning mb-2"></i>
+                                <h6>Security</h6>
+                                <span class="badge bg-warning">Protected</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3 text-center mb-3">
+                            <div class="p-3 border rounded">
+                                <i class="fas fa-bolt fa-2x text-info mb-2"></i>
+                                <h6>Performance</h6>
+                                <span class="badge bg-info">Optimal</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // Sales Chart
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('salesChart').getContext('2d');
+            const salesChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                    datasets: [{
+                        label: 'Sales ($)',
+                        data: [1200, 1900, 3000, 5000, 2000, 3000, 4500, 6000],
+                        borderColor: '#4e73df',
+                        backgroundColor: 'rgba(78, 115, 223, 0.05)',
+                        pointBackgroundColor: '#4e73df',
+                        pointBorderColor: '#4e73df',
+                        pointRadius: 5,
+                        pointHoverRadius: 8,
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                drawBorder: false
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value;
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Update greeting based on time
+            function updateGreeting() {
+                const hour = new Date().getHours();
+                const greetingElement = document.querySelector('.opacity-75 span');
+                if (greetingElement) {
+                    if (hour < 12) {
+                        greetingElement.textContent = 'Good morning! ☀️';
+                    } else if (hour < 18) {
+                        greetingElement.textContent = 'Good afternoon! 🌤️';
+                    } else {
+                        greetingElement.textContent = 'Good evening! 🌙';
+                    }
+                }
+            }
+
+            updateGreeting();
+            // Update every minute
+            setInterval(updateGreeting, 60000);
+
+            // Animate counter numbers
+            function animateCounter(element, target) {
+                let current = 0;
+                const increment = target / 100;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        element.textContent = target;
+                        clearInterval(timer);
+                    } else {
+                        element.textContent = Math.floor(current);
+                    }
+                }, 20);
+            }
+
+            // Animate stat cards on scroll
+            const observerOptions = {
+                threshold: 0.5
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const statCards = entry.target.querySelectorAll('.h5.mb-0');
+                        statCards.forEach(card => {
+                            const target = parseInt(card.textContent.replace(/[^0-9]/g, ''));
+                            if (!isNaN(target)) {
+                                animateCounter(card, target);
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            const statsSection = document.querySelector('.row.mb-4');
+            if (statsSection) {
+                observer.observe(statsSection);
+            }
+        });
+    </script>
+
+    <style>
+        /* Custom Dashboard Styles */
+        .card {
+            border-radius: 0.5rem;
+            transition: transform 0.2s;
+        }
+
+            .card:hover {
+                transform: translateY(-5px);
+            }
+
+        .border-left-primary {
+            border-left: 0.25rem solid #4e73df !important;
+        }
+
+        .border-left-success {
+            border-left: 0.25rem solid #1cc88a !important;
+        }
+
+        .border-left-warning {
+            border-left: 0.25rem solid #f6c23e !important;
+        }
+
+        .border-left-info {
+            border-left: 0.25rem solid #36b9cc !important;
+        }
+
+        .bg-gradient-primary {
+            background: linear-gradient(90deg, #4e73df 0%, #224abe 100%);
+        }
+
+        .chart-container {
+            position: relative;
+        }
+
+        .progress {
+            border-radius: 10px;
+        }
+
+        .progress-bar {
+            border-radius: 10px;
+        }
+
+        .table th {
+            border-top: none;
+            border-bottom: 2px solid #e3e6f0;
+        }
+
+        .table td {
+            vertical-align: middle;
+        }
+    </style>
+}

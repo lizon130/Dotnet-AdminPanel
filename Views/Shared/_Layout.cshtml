@@ -1,0 +1,430 @@
+﻿@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
+@inject ProductApp.Data.AppDbContext DbContext
+@{
+    var setting = DbContext.SiteSettings.FirstOrDefault();
+    var isLoggedIn = Context.Session.GetInt32("UserId") != null;
+    var sidebarCollapsed = Context.Request.Cookies["sidebarCollapsed"] == "true";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@(ViewData["Title"] + " - " + (setting?.SiteName ?? "ProductApp"))</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* ✅ BODY & BASE STYLES */
+        body {
+            background-color: #f8f9fa;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* ✅ SIDEBAR */
+        .sidebar {
+            height: 100vh;
+            background: linear-gradient(180deg, #2c3e50 0%, #1a252f 100%);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 240px;
+            z-index: 2000;
+            padding-top: 20px;
+            box-shadow: 3px 0 10px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+
+        /* WHEN SIDEBAR IS HIDDEN */
+        .sidebar-hidden .sidebar {
+            transform: translateX(-100%);
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .sidebar a {
+            color: #ddd;
+            padding: 12px 20px;
+            display: block;
+            text-decoration: none;
+            border-left: 4px solid transparent;
+            transition: all 0.3s;
+        }
+
+            .sidebar a:hover {
+                background-color: #34495e;
+                color: white;
+                border-left-color: #3498db;
+                padding-left: 25px;
+            }
+
+        .sidebar .active {
+            background-color: #0d6efd;
+            border-left-color: #0b5ed7;
+            color: white;
+        }
+
+        /* ✅ NAVBAR */
+        .navbar-custom {
+            background: #1a252f;
+            margin-left: 240px; /* Default with sidebar */
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: margin-left 0.3s ease;
+        }
+
+        .sidebar-hidden .navbar-custom {
+            margin-left: 0;
+        }
+
+        /* ✅ MAIN CONTENT */
+        .main-content {
+            margin-left: 240px;
+            padding: 80px;
+            padding-top: 80px;
+            min-height: calc(100vh - 60px);
+            transition: margin-left 0.3s ease;
+        }
+
+        .sidebar-hidden .main-content {
+            margin-left: 0;
+        }
+
+        /* ✅ FOOTER */
+        footer {
+            margin-left: 240px;
+            background-color: #2c3e50;
+            color: white;
+            transition: margin-left 0.3s ease;
+        }
+
+        .sidebar-hidden footer {
+            margin-left: 0;
+        }
+
+        /* ✅ TOGGLE BUTTON - FIXED POSITION, ALWAYS VISIBLE */
+        .sidebar-toggle-btn {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            background: linear-gradient(180deg, #2c3e50 0%, #1a252f 100%);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 0 5px 5px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 2001; /* Above everything */
+            box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+            /* When sidebar is visible, button moves to right side of sidebar */
+            .sidebar-toggle-btn.sidebar-visible {
+                left: 240px;
+                top: 8px;
+            }
+
+            .sidebar-toggle-btn:hover {
+                background: #14238f61;
+                width: 45px;
+            }
+
+            
+
+            .sidebar-toggle-btn i {
+                transition: transform 0.3s ease;
+            }
+
+        .sidebar-hidden .sidebar-toggle-btn i {
+            transform: rotate(180deg);
+        }
+
+        /* ✅ MOBILE MENU BUTTON */
+        .mobile-menu-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+
+        /* ✅ RESPONSIVE FOR MOBILE */
+        @@media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+                opacity: 0;
+                visibility: hidden;
+            }
+
+            .sidebar-mobile-open .sidebar {
+                transform: translateX(0);
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .navbar-custom,
+            .main-content,
+            footer {
+                margin-left: 0 !important;
+            }
+
+            .sidebar-toggle-btn {
+                display: none !important;
+            }
+
+            .mobile-menu-btn {
+                display: block !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="@(isLoggedIn && !sidebarCollapsed ? "" : "sidebar-hidden")">
+
+    <!-- ✅ TOGGLE BUTTON - ALWAYS VISIBLE (OUTSIDE SIDEBAR) -->
+    @if (isLoggedIn)
+    {
+        <button class="sidebar-toggle-btn @(sidebarCollapsed ? "" : "sidebar-visible")"
+                id="sidebarToggle"
+                title="@(sidebarCollapsed ? "Show Sidebar" : "Hide Sidebar")">
+            <i class="fas fa-chevron-@(sidebarCollapsed ? "right" : "left")"></i>
+        </button>
+    }
+
+    <!-- ✅ SIDEBAR (ONLY FOR LOGGED IN USERS) -->
+    @if (isLoggedIn)
+    {
+        <div class="sidebar">
+            <div class="sidebar-header text-center pb-3">
+                <!-- DYNAMIC LOGO -->
+                @if (setting != null && !string.IsNullOrEmpty(setting.Logo))
+                {
+                    <img src="~/uploads/@setting.Logo"
+                         style="height: 60px; width: auto; margin-bottom: 10px;"
+                         alt="@setting.SiteName" />
+                }
+                <h5 class="text-white mb-1">@(setting?.SiteName ?? "ProductApp")</h5>
+                <small class="text-white">Admin Panel</small>
+            </div>
+
+            <!-- NAVIGATION MENU -->
+            <a asp-controller="Home" asp-action="Index"
+               class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" && ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")">
+                <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+            </a>
+
+            <a asp-controller="Products" asp-action="Index"
+               class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Products" ? "active" : "")">
+                <i class="fas fa-box me-2"></i> Products
+            </a>
+
+            <a asp-controller="Products" asp-action="Create">
+                <i class="fas fa-plus-circle me-2"></i> Add Product
+            </a>
+
+            <!-- ADMIN SECTION -->
+            @if (Context.Session.GetString("UserRole") == "Admin")
+            {
+                <div class="text-muted small px-3 mt-3 mb-1">ADMIN CONTROLS</div>
+                <a asp-controller="Users" asp-action="Index">
+                    <i class="fas fa-users me-2"></i> User Management
+                </a>
+
+                <a asp-controller="Settings" asp-action="Index" class="position-relative">
+                    <i class="fas fa-cog me-2"></i> Settings
+                    @if (DbContext.SiteSettings.Any())
+                    {
+                        <span class="badge bg-success" style="font-size: 0.6rem; position: absolute; right: 15px; top: 50%; transform: translateY(-50%);">
+                            <i class="fas fa-check"></i>
+                        </span>
+                    }
+                </a>
+            }
+
+            <!-- USER SECTION -->
+            <div class="text-white small px-3 mt-3 mb-1">MY ACCOUNT</div>
+            <a asp-controller="Profile" asp-action="Index">
+                <i class="fas fa-user me-2"></i> My Profile
+            </a>
+
+            <a asp-controller="Account" asp-action="ChangePassword">
+                <i class="fas fa-key me-2"></i> Change Password
+            </a>
+
+            <a asp-controller="Home" asp-action="Privacy">
+                <i class="fas fa-shield-alt me-2"></i> Privacy
+            </a>
+
+            <a asp-controller="Settings" asp-action="index">
+                <i class="fas fa-shield-alt me-2"></i> Settings
+            </a>
+
+            
+
+
+            <!-- LOGOUT -->
+            <div class="position-absolute bottom-0 w-100">
+                <hr class="bg-secondary mx-3">
+                <a asp-controller="Account" asp-action="Logout" class="text-danger">
+                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                </a>
+            </div>
+        </div>
+    }
+
+    <!-- ✅ TOP NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-custom navbar-dark fixed-top">
+        <div class="container-fluid">
+            <!-- NAVBAR COLLAPSE -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a style="margin-left: 40px;" class="nav-link" asp-controller="Home" asp-action="Index">
+                            <i class="fas fa-home me-1"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Home" asp-action="Privacy">
+                            <i class="fas fa-shield-alt me-1"></i> Privacy
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- USER INFO SECTION -->
+                <div class="navbar-nav align-items-center">
+                    @if (isLoggedIn)
+                    {
+                        <div class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user-circle me-2"></i>
+                                <div class="d-flex flex-column">
+                                    <span class="fw-bold">@Context.Session.GetString("UserName")</span>
+                                    <small class="text-light opacity-75">
+                                        @Context.Session.GetString("UserRole")
+                                    </small>
+                                </div>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Account" asp-action="Profile">
+                                        <i class="fas fa-user me-2"></i> Profile
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item text-danger" asp-controller="Account" asp-action="Logout">
+                                        <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    }
+                    else
+                    {
+                        <a class="btn btn-light btn-sm me-2" asp-controller="Account" asp-action="Login">
+                            <i class="fas fa-sign-in-alt me-1"></i> Login
+                        </a>
+                        <a class="btn btn-outline-light btn-sm" asp-controller="Account" asp-action="Register">
+                            <i class="fas fa-user-plus me-1"></i> Register
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ✅ MAIN CONTENT -->
+    <div class="main-content">
+        @RenderBody()
+    </div>
+
+
+    <!-- ✅ SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        // ✅ FIXED TOGGLE SYSTEM - BUTTON ALWAYS VISIBLE
+        document.addEventListener('DOMContentLoaded', function() {
+            const body = document.body;
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+
+            // 1. DESKTOP TOGGLE (ALWAYS VISIBLE BUTTON)
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    const isCurrentlyHidden = body.classList.contains('sidebar-hidden');
+
+                    // Toggle sidebar visibility
+                    body.classList.toggle('sidebar-hidden');
+
+                    // Update button position and icon
+                    if (isCurrentlyHidden) {
+                        // Showing sidebar: move button to right, show left arrow
+                        sidebarToggle.classList.add('sidebar-visible');
+                        sidebarToggle.innerHTML = '<i class="fas fa-chevron-left"></i>';
+                        sidebarToggle.title = "Hide Sidebar";
+                    } else {
+                        // Hiding sidebar: move button to left, show right arrow
+                        sidebarToggle.classList.remove('sidebar-visible');
+                        sidebarToggle.innerHTML = '<i class="fas fa-chevron-right"></i>';
+                        sidebarToggle.title = "Show Sidebar";
+                    }
+
+                    // Save preference to cookie (30 days)
+                    const isHidden = body.classList.contains('sidebar-hidden');
+                    document.cookie = `sidebarCollapsed=${isHidden}; path=/; max-age=${30 * 24 * 60 * 60}`;
+                });
+
+                // Apply saved state on page load
+                const cookieValue = document.cookie
+                    .split('; ')
+                    .find(row => row.startsWith('sidebarCollapsed='));
+
+                if (cookieValue && cookieValue.split('=')[1] === 'true') {
+                    body.classList.add('sidebar-hidden');
+                    sidebarToggle.classList.remove('sidebar-visible');
+                    sidebarToggle.innerHTML = '<i class="fas fa-chevron-right"></i>';
+                    sidebarToggle.title = "Show Sidebar";
+                }
+            }
+
+            // 2. MOBILE MENU TOGGLE
+            if (mobileMenuToggle) {
+                mobileMenuToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    body.classList.toggle('sidebar-mobile-open');
+                });
+
+                // Close mobile menu when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (body.classList.contains('sidebar-mobile-open') &&
+                        !e.target.closest('.sidebar') &&
+                        !e.target.closest('#mobileMenuToggle')) {
+                        body.classList.remove('sidebar-mobile-open');
+                    }
+                });
+            }
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
