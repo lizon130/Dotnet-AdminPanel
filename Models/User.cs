@@ -4,6 +4,7 @@ namespace ProductApp.Models
 {
     public class User
     {
+        [Key]
         public int Id { get; set; }
 
         [Required, StringLength(100)]
@@ -16,6 +17,8 @@ namespace ProductApp.Models
         public string PasswordHash { get; set; } = null!;
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        public virtual ProfileTab? ProfProfileTabile { get; set; }
     }
 }
 

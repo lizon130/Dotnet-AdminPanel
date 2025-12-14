@@ -12,8 +12,8 @@ using ProductApp.Data;
 namespace ProductApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251211052527_AddProfileTable")]
-    partial class AddProfileTable
+    [Migration("20251212094959_InitialCreate66")]
+    partial class InitialCreate66
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,7 +53,7 @@ namespace ProductApp.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("ProductApp.Models.Profile", b =>
+            modelBuilder.Entity("ProductApp.Models.ProfileTab", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -62,28 +62,6 @@ namespace ProductApp.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("City")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Country")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Department")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Description")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -91,15 +69,15 @@ namespace ProductApp.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("Phone")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<string>("PhoneNo")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Photo")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("UserId")
@@ -110,7 +88,7 @@ namespace ProductApp.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Profiles");
+                    b.ToTable("ProfileTabs");
                 });
 
             modelBuilder.Entity("ProductApp.Models.SiteSetting", b =>
@@ -164,11 +142,11 @@ namespace ProductApp.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ProductApp.Models.Profile", b =>
+            modelBuilder.Entity("ProductApp.Models.ProfileTab", b =>
                 {
                     b.HasOne("ProductApp.Models.User", "User")
-                        .WithOne("Profile")
-                        .HasForeignKey("ProductApp.Models.Profile", "UserId")
+                        .WithOne("ProfProfileTabile")
+                        .HasForeignKey("ProductApp.Models.ProfileTab", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -177,7 +155,7 @@ namespace ProductApp.Migrations
 
             modelBuilder.Entity("ProductApp.Models.User", b =>
                 {
-                    b.Navigation("Profile");
+                    b.Navigation("ProfProfileTabile");
                 });
 #pragma warning restore 612, 618
         }

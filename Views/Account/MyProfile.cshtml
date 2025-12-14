@@ -1,0 +1,111 @@
+﻿@model ProductApp.Models.ProfileViewModel
+
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<div class="container mt-4">
+    <h2>My Profile</h2>
+    <hr />
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Profile Information</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <strong>Full Name:</strong>
+                        </div>
+                        <div class="col-md-9">
+                            @Model.UserFullName
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <strong>Email:</strong>
+                        </div>
+                        <div class="col-md-9">
+                            @Model.UserEmail
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <strong>Designation:</strong>
+                        </div>
+                        <div class="col-md-9">
+                            @(Model.Designation ?? "Not specified")
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <strong>Phone:</strong>
+                        </div>
+                        <div class="col-md-9">
+                            @(Model.PhoneNo ?? "Not specified")
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <strong>Address:</strong>
+                        </div>
+                        <div class="col-md-9">
+                            @(Model.Address ?? "Not specified")
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <strong>Profile Photo:</strong>
+                        </div>
+                        <div class="col-md-9">
+                            @if (!string.IsNullOrEmpty(Model.ExistingPhoto))
+                            {
+                                <img src="/uploads/profile/@Model.ExistingPhoto" alt="Profile Photo"
+                                     class="img-thumbnail" style="max-width: 150px; max-height: 150px;" />
+                            }
+                            else
+                            {
+                                <span class="text-muted">No photo uploaded</span>
+                            }
+                        </div>
+                    </div>
+
+                    @if (Model.UpdatedAt.HasValue)
+                    {
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                <strong>Last Updated:</strong>
+                            </div>
+                            <div class="col-md-9">
+                                @Model.UpdatedAt.Value.ToString("dd/MM/yyyy hh:mm tt")
+                            </div>
+                        </div>
+                    }
+
+                    <div class="mt-4">
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
+                            <i class="bi bi-pencil"></i> Edit Profile
+                        </a>
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">
+                            <i class="bi bi-house"></i> Back to Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

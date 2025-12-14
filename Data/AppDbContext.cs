@@ -11,6 +11,25 @@ namespace ProductApp.Data
         public DbSet<SiteSetting> SiteSettings { get; set; }
 
         public DbSet<User> Users { get; set; } = null!;
+
+        public DbSet<ProfileTab> ProfileTabs { get; set; } = null!;
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Configure one-to-one relationship between User and Profile
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.ProfProfileTabile)
+                .WithOne(p => p.User)
+                .HasForeignKey<ProfileTab>(p => p.UserId);
+
+            // You might want to ensure UserId is unique for one-to-one relationship
+            modelBuilder.Entity<ProfileTab>()
+                .HasIndex(p => p.UserId)
+                .IsUnique();
+        }
     }
 
     

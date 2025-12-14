@@ -236,6 +236,7 @@ D:\Dot-Net Project\ProductApp\obj\Debug\net8.0\ProductApp.csproj.CoreCompileInpu
 D:\Dot-Net Project\ProductApp\obj\Debug\net8.0\ProductApp.MvcApplicationPartsAssemblyInfo.cache
 D:\Dot-Net Project\ProductApp\obj\Debug\net8.0\ProductApp.RazorAssemblyInfo.cache
 D:\Dot-Net Project\ProductApp\obj\Debug\net8.0\ProductApp.RazorAssemblyInfo.cs
+D:\Dot-Net Project\ProductApp\obj\Debug\net8.0\ProductApp.sourcelink.json
 D:\Dot-Net Project\ProductApp\obj\Debug\net8.0\rjimswa.dswa.cache.json
 D:\Dot-Net Project\ProductApp\obj\Debug\net8.0\rjsmrazor.dswa.cache.json
 D:\Dot-Net Project\ProductApp\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json
@@ -246,10 +247,10 @@ D:\Dot-Net Project\ProductApp\obj\Debug\net8.0\staticwebassets.build.json
 D:\Dot-Net Project\ProductApp\obj\Debug\net8.0\staticwebassets.build.json.cache
 D:\Dot-Net Project\ProductApp\obj\Debug\net8.0\staticwebassets.development.json
 D:\Dot-Net Project\ProductApp\obj\Debug\net8.0\staticwebassets.build.endpoints.json
-D:\Dot-Net Project\ProductApp\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 D:\Dot-Net Project\ProductApp\obj\Debug\net8.0\ProductApp.csproj.Up2Date
 D:\Dot-Net Project\ProductApp\obj\Debug\net8.0\ProductApp.dll
 D:\Dot-Net Project\ProductApp\obj\Debug\net8.0\refint\ProductApp.dll
 D:\Dot-Net Project\ProductApp\obj\Debug\net8.0\ProductApp.pdb
 D:\Dot-Net Project\ProductApp\obj\Debug\net8.0\ProductApp.genruntimeconfig.cache
 D:\Dot-Net Project\ProductApp\obj\Debug\net8.0\ref\ProductApp.dll
+D:\Dot-Net Project\ProductApp\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

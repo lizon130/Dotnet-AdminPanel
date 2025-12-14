@@ -3,6 +3,9 @@ using ProductApp.Data;
 using ProductApp.Helpers;
 using ProductApp.Models;
 
+using Microsoft.AspNetCore.Http;
+using System.Linq;
+
 namespace ProductApp.Controllers
 {
     public class AccountController : Controller
@@ -63,5 +66,112 @@ namespace ProductApp.Controllers
             HttpContext.Session.Clear();
             return RedirectToAction("Login");
         }
+
+
+        // ✅ VIEW ALL USERS (Admin/Management)
+        public IActionResult Users()
+        {
+            var users = _context.Users.ToList();
+            return View(users);
+        }
+
+        // ✅ CHANGE PASSWORD
+        public IActionResult ChangePassword()
+        {
+            // Check if user is logged in
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                TempData["ErrorMessage"] = "Please log in to change your password.";
+                return RedirectToAction("Login");
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ChangePassword(ChangePasswordViewModel model)
+        {
+            // Check if user is logged in
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                TempData["ErrorMessage"] = "Please log in to change your password.";
+                return RedirectToAction("Login");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            // Get current user
+            var user = _context.Users.Find(userId);
+            if (user == null)
+            {
+                TempData["ErrorMessage"] = "User not found.";
+                return RedirectToAction("Login");
+            }
+
+            // Verify current password
+            var currentPasswordHash = PasswordHelper.HashPassword(model.CurrentPassword);
+            if (user.PasswordHash != currentPasswordHash)
+            {
+                ModelState.AddModelError("CurrentPassword", "Current password is incorrect.");
+                return View(model);
+            }
+
+            // Check if new password is same as current password
+            var newPasswordHash = PasswordHelper.HashPassword(model.NewPassword);
+            if (user.PasswordHash == newPasswordHash)
+            {
+                ModelState.AddModelError("NewPassword", "New password must be different from current password.");
+                return View(model);
+            }
+
+            // Update password
+            user.PasswordHash = newPasswordHash;
+            _context.Users.Update(user);
+            _context.SaveChanges();
+
+            TempData["SuccessMessage"] = "Password changed successfully!";
+            return RedirectToAction("ChangePassword", "Account"); 
+        }
+
+        // ✅ FORGOT PASSWORD (Optional)
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ForgotPassword(string email)
+        {
+            // This is a simple version - in production, you'd send an email
+            var user = _context.Users.FirstOrDefault(u => u.Email == email);
+
+            if (user != null)
+            {
+                // In a real app, send password reset email here
+                TempData["InfoMessage"] = "If an account exists with this email, password reset instructions have been sent.";
+            }
+            else
+            {
+                // Don't reveal that the user doesn't exist for security
+                TempData["InfoMessage"] = "If an account exists with this email, password reset instructions have been sent.";
+            }
+
+            return View();
+        }
+
+        // ✅ RESET PASSWORD (Optional)
+        public IActionResult ResetPassword(string token)
+        {
+            // Verify token and show reset form
+            // This requires a token system which is more complex
+            return View();
+        }
+
     }
 }

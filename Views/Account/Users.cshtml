@@ -1,0 +1,46 @@
+﻿@model List<ProductApp.Models.User>
+@{
+    ViewData["Title"] = "Registered Users";
+}
+
+<div class="container">
+    <h2>@ViewData["Title"]</h2>
+
+    <div class="mb-3">
+        <a asp-action="Register" class="btn btn-primary">Add New User</a>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Back to Home</a>
+    </div>
+
+    @if (Model.Any())
+    {
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.Id</td>
+                        <td>@user.FullName</td>
+                        <td>@user.Email</td>
+                        <td>@user.CreatedAt</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <p>Total Users: @Model.Count</p>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            No users found. <a asp-action="Register">Register a new user</a>
+        </div>
+    }
+</div>
