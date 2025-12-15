@@ -1,0 +1,54 @@
+﻿@model ProductApp.ViewModels.UserRolesViewModel
+@{
+    ViewData["Title"] = "Manage User Roles";
+}
+
+<div class="container mt-4">
+    <h2>Manage Roles for: @Model.UserName</h2>
+    <p class="text-muted">Email: @Model.UserEmail</p>
+    <hr />
+
+    <form asp-action="Manage" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="UserId" />
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Assign Roles</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    @foreach (var role in Model.AllRoles)
+                    {
+                        <div class="col-md-4 mb-3">
+                            <div class="form-check">
+                                <input type="checkbox"
+                                       class="form-check-input"
+                                       name="SelectedRoleIds"
+                                       value="@role.RoleId"
+                                       id="role_@role.RoleId"
+                                       @(role.IsSelected ? "checked" : "") />
+                                <label class="form-check-label" for="role_@role.RoleId">
+                                    @role.RoleName
+                                </label>
+                            </div>
+                        </div>
+                    }
+
+                    @if (!Model.AllRoles.Any())
+                    {
+                        <div class="alert alert-warning">
+                            No roles created yet. <a asp-controller="Roles" asp-action="Create">Create some roles first.</a>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </div>
+    </form>
+</div>

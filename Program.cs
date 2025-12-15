@@ -1,8 +1,43 @@
 using Microsoft.EntityFrameworkCore;
 using ProductApp.Data;
-using Microsoft.AspNetCore.Authentication.Cookies; // Add this using statement
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Drawing;  // Add this
+using System.Drawing.Imaging;  // Add this
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Create default avatar if it doesn't exist
+try
+{
+    var wwwrootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+    var imagesPath = Path.Combine(wwwrootPath, "images");
+
+    if (!Directory.Exists(imagesPath))
+    {
+        Directory.CreateDirectory(imagesPath);
+    }
+
+    var defaultAvatarPath = Path.Combine(imagesPath, "default-avatar.png");
+    if (!System.IO.File.Exists(defaultAvatarPath))
+    {
+        // Create a simple colored circle as default avatar
+        using (var bitmap = new Bitmap(200, 200))
+        using (var graphics = Graphics.FromImage(bitmap))
+        {
+            graphics.Clear(Color.LightGray);
+            graphics.FillEllipse(Brushes.SteelBlue, 10, 10, 180, 180);
+            graphics.DrawString("U", new Font("Arial", 80, FontStyle.Bold),
+                Brushes.White, 60, 50);
+            bitmap.Save(defaultAvatarPath, ImageFormat.Png);
+        }
+        Console.WriteLine("Default avatar created successfully.");
+    }
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Warning: Could not create default avatar: {ex.Message}");
+    // Don't crash the app if avatar creation fails
+}
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -10,7 +45,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddSession();
 
-// ADD THESE LINES: Configure Authentication
+// Configure Authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -21,8 +56,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     });
 
 builder.Services.AddAuthorization();
-
-// Register IHttpContextAccessor (if not already in ProfileController constructor)
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
@@ -31,7 +64,6 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -40,8 +72,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// IMPORTANT: Add UseAuthentication BEFORE UseAuthorization
-app.UseAuthentication(); // Add this line
+// IMPORTANT ORDER
+app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
 

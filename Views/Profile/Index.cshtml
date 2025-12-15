@@ -1,0 +1,208 @@
+﻿@model ProductApp.Models.User
+@{
+    ViewData["Title"] = "My Profile";
+    var profile = Model.Profile;
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- Profile Header -->
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>@ViewData["Title"]</h2>
+                <a asp-action="Edit" class="btn btn-primary">
+                    <i class="fas fa-edit"></i> Edit Profile
+                </a>
+            </div>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="row">
+        <!-- Left Column - Profile Card -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <!-- Profile Photo -->
+                    <div class="mb-3">
+                        <img src="@Model.GetProfilePhotoUrl()"
+                             class="rounded-circle border"
+                             style="width: 150px; height: 150px; object-fit: cover;"
+                             alt="Profile Photo"
+                             id="profilePhoto">
+                    </div>
+
+                    <h4>@Model.FullName</h4>
+                    <p class="text-muted">
+                        <i class="fas fa-briefcase me-1"></i>
+                        @(profile?.Designation ?? "Not specified")
+                    </p>
+
+                    @if (profile?.Department != null)
+                    {
+                        <p class="text-muted">
+                            <i class="fas fa-building me-1"></i> @profile.Department
+                        </p>
+                    }
+
+                    <!-- User Roles Badges -->
+                    <div class="mt-3">
+                        @foreach (var userRole in Model.UserRoles)
+                        {
+                            <span class="badge bg-primary me-1 mb-1">@userRole.Role?.Name</span>
+                        }
+                    </div>
+
+                    <!-- Contact Info -->
+                    <div class="mt-4 text-start">
+                        <h6><i class="fas fa-info-circle me-2"></i> Contact Information</h6>
+                        <hr class="my-2">
+
+                        <p class="mb-1">
+                            <i class="fas fa-envelope me-2"></i>
+                            <strong>Email:</strong> @Model.Email
+                        </p>
+
+                        @if (!string.IsNullOrEmpty(profile?.PhoneNumber))
+                        {
+                            <p class="mb-1">
+                                <i class="fas fa-phone me-2"></i>
+                                <strong>Phone:</strong> @profile.PhoneNumber
+                            </p>
+                        }
+
+                        @if (profile?.DateOfBirth.HasValue == true)
+                        {
+                            <p class="mb-1">
+                                <i class="fas fa-birthday-cake me-2"></i>
+                                <strong>Date of Birth:</strong> @profile.DateOfBirth.Value.ToString("MMMM dd, yyyy")
+                            </p>
+                        }
+
+                        @if (!string.IsNullOrEmpty(profile?.Gender))
+                        {
+                            <p class="mb-1">
+                                <i class="fas fa-venus-mars me-2"></i>
+                                <strong>Gender:</strong> @profile.Gender
+                            </p>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Social Links -->
+            @if (profile != null &&
+                        (!string.IsNullOrEmpty(profile.LinkedIn) ||
+                        !string.IsNullOrEmpty(profile.Twitter) ||
+                        !string.IsNullOrEmpty(profile.GitHub) ||
+                        !string.IsNullOrEmpty(profile.Website)))
+            {
+                <div class="card shadow mt-4">
+                    <div class="card-body">
+                        <h6><i class="fas fa-share-alt me-2"></i> Social Links</h6>
+                        <hr class="my-2">
+                        <div class="d-flex justify-content-around mt-3">
+                            @if (!string.IsNullOrEmpty(profile.LinkedIn))
+                            {
+                                <a href="@profile.LinkedIn" target="_blank" class="btn btn-outline-primary btn-sm">
+                                    <i class="fab fa-linkedin"></i>
+                                </a>
+                            }
+                            @if (!string.IsNullOrEmpty(profile.Twitter))
+                            {
+                                <a href="@profile.Twitter" target="_blank" class="btn btn-outline-info btn-sm">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                            }
+                            @if (!string.IsNullOrEmpty(profile.GitHub))
+                            {
+                                <a href="@profile.GitHub" target="_blank" class="btn btn-outline-dark btn-sm">
+                                    <i class="fab fa-github"></i>
+                                </a>
+                            }
+                            @if (!string.IsNullOrEmpty(profile.Website))
+                            {
+                                <a href="@profile.Website" target="_blank" class="btn btn-outline-success btn-sm">
+                                    <i class="fas fa-globe"></i>
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Right Column - Details -->
+        <div class="col-md-8">
+            <!-- Bio -->
+            @if (!string.IsNullOrEmpty(profile?.Bio))
+            {
+                <div class="card shadow mb-4">
+                    <div class="card-body">
+                        <h5><i class="fas fa-user-edit me-2"></i> About Me</h5>
+                        <hr>
+                        <p class="card-text">@profile.Bio</p>
+                    </div>
+                </div>
+            }
+
+            <!-- Address Information -->
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <h5><i class="fas fa-map-marker-alt me-2"></i> Address Information</h5>
+                    <hr>
+                    @if (!string.IsNullOrEmpty(profile?.Address))
+                    {
+                        <p class="mb-1"><strong>Address:</strong> @profile.Address</p>
+                    }
+                    @if (!string.IsNullOrEmpty(profile?.City))
+                    {
+                        <p class="mb-1"><strong>City:</strong> @profile.City</p>
+                    }
+                    @if (!string.IsNullOrEmpty(profile?.State))
+                    {
+                        <p class="mb-1"><strong>State:</strong> @profile.State</p>
+                    }
+                    @if (!string.IsNullOrEmpty(profile?.Country))
+                    {
+                        <p class="mb-1"><strong>Country:</strong> @profile.Country</p>
+                    }
+                    @if (!string.IsNullOrEmpty(profile?.PostalCode))
+                    {
+                        <p class="mb-0"><strong>Postal Code:</strong> @profile.PostalCode</p>
+                    }
+                </div>
+            </div>
+
+            <!-- Account Information -->
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5><i class="fas fa-user-cog me-2"></i> Account Information</h5>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-2"><strong>Member Since:</strong></p>
+                            <p>@Model.CreatedAt.ToString("MMMM dd, yyyy")</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-2"><strong>Profile Last Updated:</strong></p>
+                            <p>@(profile?.UpdatedAt.ToString("MMMM dd, yyyy hh:mm tt") ?? "Never")</p>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a asp-controller="Account" asp-action="ChangePassword" class="btn btn-outline-warning btn-sm me-2">
+                            <i class="fas fa-key"></i> Change Password
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

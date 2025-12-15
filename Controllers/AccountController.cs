@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ProductApp.Data;
 using ProductApp.Helpers;
 using ProductApp.Models;
-
-using Microsoft.AspNetCore.Http;
 using System.Linq;
 
 namespace ProductApp.Controllers
@@ -45,8 +45,11 @@ namespace ProductApp.Controllers
         {
             var hash = PasswordHelper.HashPassword(password);
 
-            var user = _context.Users.SingleOrDefault(x =>
-                x.Email == email && x.PasswordHash == hash);
+            // IMPORTANT: Include UserRoles and Role
+            var user = _context.Users
+                .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+                .SingleOrDefault(x => x.Email == email && x.PasswordHash == hash);
 
             if (user == null)
             {
@@ -56,6 +59,13 @@ namespace ProductApp.Controllers
 
             HttpContext.Session.SetInt32("UserId", user.Id);
             HttpContext.Session.SetString("UserName", user.FullName);
+
+            // Store roles in Session
+            var roles = user.UserRoles.Select(ur => ur.Role?.Name).Where(name => !string.IsNullOrEmpty(name)).ToList();
+            HttpContext.Session.SetString("UserRoles", string.Join(",", roles));
+
+            // Also set UserRole for backward compatibility
+            HttpContext.Session.SetString("UserRole", roles.FirstOrDefault() ?? "User");
 
             return RedirectToAction("Index", "Home");
         }

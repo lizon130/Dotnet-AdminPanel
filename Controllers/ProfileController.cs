@@ -2,277 +2,342 @@
 using Microsoft.EntityFrameworkCore;
 using ProductApp.Data;
 using ProductApp.Models;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 
 namespace ProductApp.Controllers
 {
-    [Authorize]
     public class ProfileController : Controller
     {
         private readonly AppDbContext _context;
         private readonly IWebHostEnvironment _environment;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ProfileController(AppDbContext context, IWebHostEnvironment environment, IHttpContextAccessor httpContextAccessor)
+        public ProfileController(AppDbContext context, IWebHostEnvironment environment)
         {
             _context = context;
             _environment = environment;
-            _httpContextAccessor = httpContextAccessor;
         }
 
-        // GET: Profile/MyProfile
-        public async Task<IActionResult> MyProfile()
+        // GET: View profile
+        public async Task<IActionResult> Index()
         {
-            var userId = GetCurrentUserId();
+            var userId = HttpContext.Session.GetInt32("UserId");
             if (userId == null)
-                return RedirectToAction("Login", "Account");
-
-            // FIXED: Changed from Profiles to ProfileTabs
-            var profile = await _context.ProfileTabs
-                .Include(p => p.User)
-                .FirstOrDefaultAsync(p => p.UserId == userId.Value);
-
-            if (profile == null)
             {
-                return RedirectToAction("Create");
+                TempData["ErrorMessage"] = "Please log in to view your profile.";
+                return RedirectToAction("Login", "Account");
             }
 
-            var viewModel = new ProfileViewModel
-            {
-                Id = profile.Id,
-                ExistingPhoto = profile.Photo,
-                Designation = profile.Designation,
-                PhoneNo = profile.PhoneNo,
-                Address = profile.Address,
-                UserId = profile.UserId,
-                UserFullName = profile.User.FullName,
-                UserEmail = profile.User.Email,
-                UpdatedAt = profile.UpdatedAt
-            };
+            var user = await _context.Users
+                .Include(u => u.Profile)
+                .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+                .FirstOrDefaultAsync(u => u.Id == userId);
 
-            return View(viewModel);
-        }
-
-        // GET: Profile/Create
-        public async Task<IActionResult> Create()
-        {
-            var userId = GetCurrentUserId();
-            if (userId == null)
-                return RedirectToAction("Login", "Account");
-
-            var user = await _context.Users.FindAsync(userId.Value);
             if (user == null)
-                return NotFound();
-
-            var viewModel = new ProfileViewModel
             {
-                UserId = user.Id,
-                UserFullName = user.FullName,
-                UserEmail = user.Email
-            };
-
-            return View(viewModel);
-        }
-
-        // POST: Profile/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ProfileViewModel viewModel)
-        {
-            if (ModelState.IsValid)
-            {
-                var profile = new ProfileTab
-                {
-                    Designation = viewModel.Designation,
-                    PhoneNo = viewModel.PhoneNo,
-                    Address = viewModel.Address,
-                    UserId = viewModel.UserId,
-                    UpdatedAt = DateTime.Now
-                };
-
-                // Handle file upload using Photo property
-                if (viewModel.PhotoFile != null && viewModel.PhotoFile.Length > 0)
-                {
-                    profile.Photo = await UploadFile(viewModel.PhotoFile);
-                }
-
-                // FIXED: Changed from Profiles to ProfileTabs
-                _context.ProfileTabs.Add(profile);
-                await _context.SaveChangesAsync();
-
-                TempData["SuccessMessage"] = "Profile created successfully!";
-                return RedirectToAction("MyProfile");
-            }
-
-            // Reload user data
-            var user = await _context.Users.FindAsync(viewModel.UserId);
-            if (user != null)
-            {
-                viewModel.UserFullName = user.FullName;
-                viewModel.UserEmail = user.Email;
-            }
-
-            return View(viewModel);
-        }
-
-        // GET: Profile/Edit
-        public async Task<IActionResult> Edit(int id)
-        {
-            var userId = GetCurrentUserId();
-            if (userId == null)
+                TempData["ErrorMessage"] = "User not found.";
                 return RedirectToAction("Login", "Account");
+            }
 
-            // FIXED: Changed from Profiles to ProfileTabs
+            // Create profile if doesn't exist
+            if (user.Profile == null)
+            {
+                user.Profile = new ProfileTab
+                {
+                    UserId = user.Id,
+                    Designation = "User",
+                    PhoneNumber = "",
+                    Address = ""
+                };
+                await _context.ProfileTabs.AddAsync(user.Profile);
+                await _context.SaveChangesAsync();
+            }
+
+            return View(user);
+        }
+
+        // GET: Edit profile
+        public async Task<IActionResult> Edit()
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var profile = await _context.ProfileTabs
                 .Include(p => p.User)
-                .FirstOrDefaultAsync(p => p.Id == id && p.UserId == userId.Value);
+                .FirstOrDefaultAsync(p => p.UserId == userId);
 
             if (profile == null)
-                return NotFound();
-
-            var viewModel = new ProfileViewModel
             {
-                Id = profile.Id,
-                ExistingPhoto = profile.Photo,
-                Designation = profile.Designation,
-                PhoneNo = profile.PhoneNo,
-                Address = profile.Address,
-                UserId = profile.UserId,
-                UserFullName = profile.User.FullName,
-                UserEmail = profile.User.Email,
-                UpdatedAt = profile.UpdatedAt
-            };
+                // Create new profile if doesn't exist
+                var user = await _context.Users.FindAsync(userId);
+                profile = new ProfileTab
+                {
+                    UserId = userId.Value,
+                    User = user
+                };
+            }
 
-            return View(viewModel);
+            return View(profile);
         }
 
-        // POST: Profile/Edit
+        // POST: Update profile
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, ProfileViewModel viewModel)
+        public async Task<IActionResult> Edit(ProfileTab profile, IFormFile? profilePhoto)
         {
-            if (id != viewModel.Id)
-                return NotFound();
-
-            var userId = GetCurrentUserId();
-            if (userId == null || userId.Value != viewModel.UserId)
-                return Forbid();
-
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
+                // Reload user data for the view
+                profile.User = await _context.Users.FindAsync(profile.UserId);
+                return View(profile);
+            }
+
+            try
+            {
+                // Handle profile photo upload
+                if (profilePhoto != null && profilePhoto.Length > 0)
                 {
-                    // FIXED: Changed from Profiles to ProfileTabs
-                    var profile = await _context.ProfileTabs.FindAsync(id);
-                    if (profile == null)
-                        return NotFound();
+                    // Validate file type
+                    var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                    var fileExtension = Path.GetExtension(profilePhoto.FileName).ToLower();
 
-                    profile.Designation = viewModel.Designation;
-                    profile.PhoneNo = viewModel.PhoneNo;
-                    profile.Address = viewModel.Address;
-                    profile.UpdatedAt = DateTime.Now;
-
-                    // Handle file upload using Photo property
-                    if (viewModel.PhotoFile != null && viewModel.PhotoFile.Length > 0)
+                    if (!allowedExtensions.Contains(fileExtension))
                     {
-                        // Delete old file if exists
-                        if (!string.IsNullOrEmpty(profile.Photo))
-                        {
-                            DeleteFile(profile.Photo);
-                        }
-                        profile.Photo = await UploadFile(viewModel.PhotoFile);
+                        ModelState.AddModelError("ProfilePhoto", "Only image files (jpg, jpeg, png, gif) are allowed.");
+                        profile.User = await _context.Users.FindAsync(profile.UserId);
+                        return View(profile);
                     }
 
-                    _context.Update(profile);
-                    await _context.SaveChangesAsync();
+                    // Validate file size (max 5MB)
+                    if (profilePhoto.Length > 5 * 1024 * 1024)
+                    {
+                        ModelState.AddModelError("ProfilePhoto", "File size should not exceed 5MB.");
+                        profile.User = await _context.Users.FindAsync(profile.UserId);
+                        return View(profile);
+                    }
 
-                    TempData["SuccessMessage"] = "Profile updated successfully!";
-                    return RedirectToAction("MyProfile");
+                    // Delete old photo if exists
+                    if (!string.IsNullOrEmpty(profile.ProfilePhoto))
+                    {
+                        var oldPhotoPath = Path.Combine(_environment.WebRootPath, "uploads", "profiles", profile.ProfilePhoto);
+                        if (System.IO.File.Exists(oldPhotoPath))
+                        {
+                            System.IO.File.Delete(oldPhotoPath);
+                        }
+                    }
+
+                    // Generate unique filename
+                    var fileName = $"{Guid.NewGuid()}{fileExtension}";
+                    var uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads", "profiles");
+
+                    // Create directory if it doesn't exist
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+
+                    var filePath = Path.Combine(uploadsFolder, fileName);
+
+                    // Save the file
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await profilePhoto.CopyToAsync(stream);
+                    }
+
+                    profile.ProfilePhoto = fileName;
                 }
-                catch (DbUpdateConcurrencyException)
+
+                // Check if profile exists
+                var existingProfile = await _context.ProfileTabs.FindAsync(profile.Id);
+
+                if (existingProfile == null)
                 {
-                    if (!ProfileExists(viewModel.Id))
-                        return NotFound();
-                    throw;
+                    // Create new profile
+                    profile.CreatedAt = DateTime.Now;
+                    profile.UpdatedAt = DateTime.Now;
+                    await _context.ProfileTabs.AddAsync(profile);
                 }
-            }
+                else
+                {
+                    // Update existing profile
+                    existingProfile.PhoneNumber = profile.PhoneNumber;
+                    existingProfile.Address = profile.Address;
+                    existingProfile.City = profile.City;
+                    existingProfile.State = profile.State;
+                    existingProfile.Country = profile.Country;
+                    existingProfile.PostalCode = profile.PostalCode;
+                    existingProfile.Designation = profile.Designation;
+                    existingProfile.Department = profile.Department;
+                    existingProfile.Bio = profile.Bio;
+                    existingProfile.LinkedIn = profile.LinkedIn;
+                    existingProfile.Twitter = profile.Twitter;
+                    existingProfile.GitHub = profile.GitHub;
+                    existingProfile.Website = profile.Website;
+                    existingProfile.DateOfBirth = profile.DateOfBirth;
+                    existingProfile.Gender = profile.Gender;
+                    existingProfile.UpdatedAt = DateTime.Now;
 
-            return View(viewModel);
+                    // Only update photo if a new one was uploaded
+                    if (!string.IsNullOrEmpty(profile.ProfilePhoto))
+                    {
+                        existingProfile.ProfilePhoto = profile.ProfilePhoto;
+                    }
+
+                    _context.ProfileTabs.Update(existingProfile);
+                }
+
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Profile updated successfully!";
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"An error occurred: {ex.Message}");
+                profile.User = await _context.Users.FindAsync(profile.UserId);
+                return View(profile);
+            }
         }
 
-        // GET: Profile/DeletePhoto
-        public async Task<IActionResult> DeletePhoto(int id)
+        // POST: Delete profile photo
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeletePhoto()
         {
-            var userId = GetCurrentUserId();
+            var userId = HttpContext.Session.GetInt32("UserId");
             if (userId == null)
-                return RedirectToAction("Login", "Account");
-
-            // FIXED: Changed from Profiles to ProfileTabs
-            var profile = await _context.ProfileTabs
-                .FirstOrDefaultAsync(p => p.Id == id && p.UserId == userId.Value);
-
-            if (profile == null)
-                return NotFound();
-
-            if (!string.IsNullOrEmpty(profile.Photo))
             {
-                DeleteFile(profile.Photo);
-                profile.Photo = null;
+                return Json(new { success = false, message = "User not logged in" });
+            }
+
+            var profile = await _context.ProfileTabs
+                .FirstOrDefaultAsync(p => p.UserId == userId);
+
+            if (profile == null || string.IsNullOrEmpty(profile.ProfilePhoto))
+            {
+                return Json(new { success = false, message = "No photo to delete" });
+            }
+
+            try
+            {
+                // Delete file from server
+                var filePath = Path.Combine(_environment.WebRootPath, "uploads", "profiles", profile.ProfilePhoto);
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+
+                // Update database
+                profile.ProfilePhoto = null;
                 profile.UpdatedAt = DateTime.Now;
+                _context.ProfileTabs.Update(profile);
                 await _context.SaveChangesAsync();
 
-                TempData["SuccessMessage"] = "Profile photo deleted successfully!";
+                return Json(new { success = true, message = "Photo deleted successfully" });
             }
-
-            return RedirectToAction("Edit", new { id });
-        }
-
-        private bool ProfileExists(int id)
-        {
-            // FIXED: Changed from Profiles to ProfileTabs
-            return _context.ProfileTabs.Any(e => e.Id == id);
-        }
-
-        private int? GetCurrentUserId()
-        {
-            var userIdString = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            return int.TryParse(userIdString, out int userId) ? userId : null;
-        }
-
-        private async Task<string> UploadFile(IFormFile file)
-        {
-            var uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads", "profile");
-            if (!Directory.Exists(uploadsFolder))
-                Directory.CreateDirectory(uploadsFolder);
-
-            var uniqueFileName = $"{Guid.NewGuid()}_{Path.GetFileName(file.FileName)}";
-            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            catch (Exception ex)
             {
-                await file.CopyToAsync(fileStream);
+                return Json(new { success = false, message = $"Error: {ex.Message}" });
+            }
+        }
+
+        // GET: View other user's profile (for admin)
+        [Route("Profile/View/{id}")]
+        public async Task<IActionResult> ViewProfile(int id)
+        {
+            var currentUserId = HttpContext.Session.GetInt32("UserId");
+            if (currentUserId == null)
+            {
+                return RedirectToAction("Login", "Account");
             }
 
-            return uniqueFileName; // This will be stored in Photo property
+            // Check if user is admin
+            var userRoles = HttpContext.Session.GetString("UserRoles")?.Split(',') ?? Array.Empty<string>();
+            if (!userRoles.Contains("Admin") && !userRoles.Contains("SuperAdmin") && currentUserId != id)
+            {
+                TempData["ErrorMessage"] = "You don't have permission to view this profile.";
+                return RedirectToAction("Index");
+            }
+
+            var user = await _context.Users
+                .Include(u => u.Profile)
+                .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+                .FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
+            {
+                TempData["ErrorMessage"] = "User not found.";
+                return RedirectToAction("Index");
+            }
+
+            return View("ViewUserProfile", user);
         }
 
-        private void DeleteFile(string fileName)
+        // SIMPLE TEST METHOD - Add this to ProfileController
+        [HttpPost]
+        public async Task<IActionResult> TestSimpleSave(string testPhone, string testAddress, string testDesignation)
         {
-            var filePath = Path.Combine(_environment.WebRootPath, "uploads", "profile", fileName);
-            if (System.IO.File.Exists(filePath))
-                System.IO.File.Delete(filePath);
-        }
+            try
+            {
+                var userId = HttpContext.Session.GetInt32("UserId");
+                if (userId == null)
+                {
+                    return Content("ERROR: No user logged in");
+                }
 
-        // Helper method to get photo URL
-        private string GetPhotoUrl(string photoFileName)
-        {
-            if (string.IsNullOrEmpty(photoFileName))
-                return null;
+                Console.WriteLine($"TestSimpleSave called for user {userId}");
+                Console.WriteLine($"Phone: {testPhone}, Address: {testAddress}, Designation: {testDesignation}");
 
-            return $"/uploads/profile/{photoFileName}";
+                // Check if profile exists
+                var existingProfile = await _context.ProfileTabs
+                    .FirstOrDefaultAsync(p => p.UserId == userId.Value);
+
+                if (existingProfile == null)
+                {
+                    // Create new profile
+                    var profile = new ProfileTab
+                    {
+                        UserId = userId.Value,
+                        PhoneNumber = testPhone,
+                        Address = testAddress,
+                        Designation = testDesignation,
+                        CreatedAt = DateTime.Now,
+                        UpdatedAt = DateTime.Now
+                    };
+
+                    _context.ProfileTabs.Add(profile);
+                    Console.WriteLine("Creating NEW profile");
+                }
+                else
+                {
+                    // Update existing
+                    existingProfile.PhoneNumber = testPhone;
+                    existingProfile.Address = testAddress;
+                    existingProfile.Designation = testDesignation;
+                    existingProfile.UpdatedAt = DateTime.Now;
+
+                    _context.ProfileTabs.Update(existingProfile);
+                    Console.WriteLine($"Updating existing profile ID: {existingProfile.Id}");
+                }
+
+                var result = await _context.SaveChangesAsync();
+                Console.WriteLine($"SaveChanges result: {result} rows affected");
+
+                return Content($"SUCCESS! Rows affected: {result}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ERROR in TestSimpleSave: {ex.Message}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                return Content($"ERROR: {ex.Message}<br>{ex.InnerException?.Message}");
+            }
         }
     }
 }

@@ -1,0 +1,96 @@
+﻿@model ProductApp.Models.User
+@{
+    ViewData["Title"] = $"{Model.FullName}'s Profile";
+    var profile = Model.Profile;
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>@ViewData["Title"]</h2>
+                <div>
+                    <a asp-controller="UserRoles" asp-action="Manage" asp-route-userId="@Model.Id" class="btn btn-info btn-sm">
+                        <i class="fas fa-user-tag"></i> Manage Roles
+                    </a>
+                    <a asp-controller="Account" asp-action="Users" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-arrow-left"></i> Back to Users
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Profile Card -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <img src="@Model.GetProfilePhotoUrl()"
+                         class="rounded-circle border mb-3"
+                         style="width: 150px; height: 150px; object-fit: cover;"
+                         alt="Profile Photo">
+
+                    <h4>@Model.FullName</h4>
+                    <p class="text-muted">
+                        <i class="fas fa-briefcase me-1"></i>
+                        @(profile?.Designation ?? "Not specified")
+                    </p>
+
+                    <div class="mt-2">
+                        <span class="badge bg-primary">Member since @Model.CreatedAt.ToString("yyyy")</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Details -->
+        <div class="col-md-8">
+            <!-- Contact Info -->
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <h5><i class="fas fa-address-card me-2"></i> Contact Information</h5>
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Email:</strong><br>@Model.Email</p>
+                        </div>
+                        @if (!string.IsNullOrEmpty(profile?.PhoneNumber))
+                        {
+                            <div class="col-md-6">
+                                <p><strong>Phone:</strong><br>@profile.PhoneNumber</p>
+                            </div>
+                        }
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(profile?.Address))
+                    {
+                        <p><strong>Address:</strong><br>@profile.Address</p>
+                    }
+                </div>
+            </div>
+
+            <!-- Additional Info -->
+            @if (!string.IsNullOrEmpty(profile?.Bio) || !string.IsNullOrEmpty(profile?.Department))
+            {
+                <div class="card shadow mb-4">
+                    <div class="card-body">
+                        <h5><i class="fas fa-info-circle me-2"></i> Additional Information</h5>
+                        <hr>
+
+                        @if (!string.IsNullOrEmpty(profile?.Department))
+                        {
+                            <p><strong>Department:</strong> @profile.Department</p>
+                        }
+
+                        @if (!string.IsNullOrEmpty(profile?.Bio))
+                        {
+                            <p><strong>Bio:</strong><br>@profile.Bio</p>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

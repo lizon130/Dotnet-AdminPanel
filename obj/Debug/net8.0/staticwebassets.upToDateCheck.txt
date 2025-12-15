@@ -1,5 +1,6 @@
 wwwroot\css\site.css
 wwwroot\favicon.ico
+wwwroot\images\default-avatar.png
 wwwroot\js\site.js
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
@@ -59,3 +60,6 @@ wwwroot\lib\jquery\dist\jquery.min.js
 wwwroot\lib\jquery\dist\jquery.min.map
 wwwroot\lib\jquery\LICENSE.txt
 wwwroot\uploads\d205a9bd-68a2-4ed6-a52a-7cf27c00acc4.png
+wwwroot\uploads\profiles\139e9fd5-4a69-4e46-8bc3-6ed89b5fa023.jpeg
+wwwroot\uploads\profiles\3e646202-8461-4d29-9302-b4b1b016bb77.jpg
+wwwroot\uploads\profiles\f9ec22f3-35c7-459b-bc9f-ff797bd329cd.jpeg

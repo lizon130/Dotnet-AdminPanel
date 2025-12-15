@@ -254,9 +254,33 @@
 
             <!-- USER SECTION -->
             <div class="text-white small px-3 mt-3 mb-1">MY ACCOUNT</div>
+
             <a asp-controller="Profile" asp-action="Index">
                 <i class="fas fa-user me-2"></i> My Profile
             </a>
+
+            <!-- ADD THESE ROLE MANAGEMENT LINKS -->
+            @{
+                var userId = Context.Session.GetInt32("UserId");
+                var userRoles = Context.Session.GetString("UserRoles")?.Split(',') ?? new string[0];
+            }
+
+            @if (userId.HasValue && (userRoles.Contains("Admin") || userRoles.Contains("SuperAdmin")))
+            {
+                <a asp-controller="Account" asp-action="Users">
+                    <i class="fas fa-user me-2"></i> User View
+                </a>
+                <a class="nav-link" asp-controller="Roles" asp-action="Index">
+                    <i class="fas fa-user-tag me-1"></i> Roles
+                </a>
+                <a class="nav-link" asp-controller="UserRoles" asp-action="Index">
+                    <i class="fas fa-users-cog me-1"></i> User Roles
+                </a>
+                <a asp-controller="Settings" asp-action="index">
+                    <i class="fas fa-shield-alt me-2"></i> Settings
+                </a>
+            }
+
 
             <a asp-controller="Account" asp-action="ChangePassword">
                 <i class="fas fa-key me-2"></i> Change Password
@@ -265,13 +289,6 @@
             <a asp-controller="Home" asp-action="Privacy">
                 <i class="fas fa-shield-alt me-2"></i> Privacy
             </a>
-
-            <a asp-controller="Settings" asp-action="index">
-                <i class="fas fa-shield-alt me-2"></i> Settings
-            </a>
-
-            
-
 
             <!-- LOGOUT -->
             <div class="position-absolute bottom-0 w-100">
@@ -311,7 +328,14 @@
                     {
                         <div class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
-                                <i class="fas fa-user-circle me-2"></i>
+                                <img src="@(
+                                     Context.Session.GetString("ProfilePhoto")
+                                     ?? "/images/default-avatar.png"
+)"
+                                 class="rounded-circle me-2 border"
+                                 style="width: 36px; height: 36px; object-fit: cover;"
+                                 alt="Profile Photo" />
+
                                 <div class="d-flex flex-column">
                                     <span class="fw-bold">@Context.Session.GetString("UserName")</span>
                                     <small class="text-light opacity-75">
@@ -321,7 +345,7 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li>
-                                    <a class="dropdown-item" asp-controller="Account" asp-action="Profile">
+                                    <a class="dropdown-item" asp-controller="Profile" asp-action="Index">
                                         <i class="fas fa-user me-2"></i> Profile
                                     </a>
                                 </li>

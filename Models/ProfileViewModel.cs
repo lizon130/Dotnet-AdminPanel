@@ -1,39 +1,68 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Http;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
-namespace ProductApp.Models
+namespace ProductApp.ViewModels
 {
     public class ProfileViewModel
     {
-        public int Id { get; set; }
-
-        [Display(Name = "Profile Photo")]
-        public IFormFile? PhotoFile { get; set; }
-
-        public string? ExistingPhoto { get; set; } // Store the existing photo filename
-
-        [StringLength(100)]
-        [Display(Name = "Designation")]
-        public string? Designation { get; set; }
-
-        [StringLength(20)]
-        [Display(Name = "Phone Number")]
-        [Phone]
-        public string? PhoneNo { get; set; }
-
-        [StringLength(500)]
-        [Display(Name = "Address")]
-        public string? Address { get; set; }
-
+        // User Info
         public int UserId { get; set; }
 
-        [Display(Name = "Full Name")]
-        public string UserFullName { get; set; } = null!;
+        [Required(ErrorMessage = "Full name is required")]
+        [StringLength(100)]
+        public string FullName { get; set; } = string.Empty;
 
-        [Display(Name = "Email")]
-        public string UserEmail { get; set; } = null!;
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress(ErrorMessage = "Invalid email address")]
+        public string Email { get; set; } = string.Empty;
 
-        [Display(Name = "Last Updated")]
-        public DateTime? UpdatedAt { get; set; }
+        // Profile Info
+        public string? ProfilePhoto { get; set; }
+
+        [Required(ErrorMessage = "Phone number is required")]
+        [Phone(ErrorMessage = "Invalid phone number")]
+        public string PhoneNumber { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Address is required")]
+        [StringLength(500)]
+        public string Address { get; set; } = string.Empty;
+
+        public string? City { get; set; }
+        public string? State { get; set; }
+        public string? Country { get; set; }
+
+        [DataType(DataType.PostalCode)]
+        public string? PostalCode { get; set; }
+
+        // Professional Information
+        [Required(ErrorMessage = "Designation is required")]
+        public string Designation { get; set; } = string.Empty;
+
+        public string? Department { get; set; }
+
+        [DataType(DataType.MultilineText)]
+        public string? Bio { get; set; }
+
+        // Social Links
+        [Url(ErrorMessage = "Invalid URL")]
+        public string? LinkedIn { get; set; }
+
+        [Url(ErrorMessage = "Invalid URL")]
+        public string? Twitter { get; set; }
+
+        [Url(ErrorMessage = "Invalid URL")]
+        public string? GitHub { get; set; }
+
+        [Url(ErrorMessage = "Invalid URL")]
+        public string? Website { get; set; }
+
+        // Additional Info
+        [DataType(DataType.Date)]
+        public DateTime? DateOfBirth { get; set; }
+
+        public string? Gender { get; set; }
+
+        // For file upload
+        public IFormFile? ProfilePhotoFile { get; set; }
     }
 }
