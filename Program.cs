@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using ProductApp.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using System.Drawing;  // Add this
-using System.Drawing.Imaging;  // Add this
+using System.Drawing;
+using System.Drawing.Imaging;
+using ProductApp.Services; // Add this
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +45,10 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddSession();
+
+// Register Email Service - ADD THIS
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 // Configure Authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

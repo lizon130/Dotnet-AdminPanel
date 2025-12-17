@@ -3,20 +3,44 @@
   "WorkspaceRootPath": "D:\\Dot-Net Project\\ProductApp\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C25669B5-EEFE-4B03-BD20-E8FCE2998ACA}|ProductApp.csproj|d:\\dot-net project\\productapp\\views\\profile\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{C25669B5-EEFE-4B03-BD20-E8FCE2998ACA}|ProductApp.csproj|solutionrelative:views\\profile\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{C25669B5-EEFE-4B03-BD20-E8FCE2998ACA}|ProductApp.csproj|d:\\dot-net project\\productapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C25669B5-EEFE-4B03-BD20-E8FCE2998ACA}|ProductApp.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C25669B5-EEFE-4B03-BD20-E8FCE2998ACA}|ProductApp.csproj|d:\\dot-net project\\productapp\\views\\profile\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{C25669B5-EEFE-4B03-BD20-E8FCE2998ACA}|ProductApp.csproj|solutionrelative:views\\profile\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{C25669B5-EEFE-4B03-BD20-E8FCE2998ACA}|ProductApp.csproj|d:\\dot-net project\\productapp\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C25669B5-EEFE-4B03-BD20-E8FCE2998ACA}|ProductApp.csproj|solutionrelative:services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C25669B5-EEFE-4B03-BD20-E8FCE2998ACA}|ProductApp.csproj|d:\\dot-net project\\productapp\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C25669B5-EEFE-4B03-BD20-E8FCE2998ACA}|ProductApp.csproj|solutionrelative:controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C25669B5-EEFE-4B03-BD20-E8FCE2998ACA}|ProductApp.csproj|d:\\dot-net project\\productapp\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{C25669B5-EEFE-4B03-BD20-E8FCE2998ACA}|ProductApp.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C25669B5-EEFE-4B03-BD20-E8FCE2998ACA}|ProductApp.csproj|d:\\dot-net project\\productapp\\productapp.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{C25669B5-EEFE-4B03-BD20-E8FCE2998ACA}|ProductApp.csproj|solutionrelative:productapp.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C25669B5-EEFE-4B03-BD20-E8FCE2998ACA}|ProductApp.csproj|d:\\dot-net project\\productapp\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C25669B5-EEFE-4B03-BD20-E8FCE2998ACA}|ProductApp.csproj|solutionrelative:models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C25669B5-EEFE-4B03-BD20-E8FCE2998ACA}|ProductApp.csproj|d:\\dot-net project\\productapp\\views\\account\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C25669B5-EEFE-4B03-BD20-E8FCE2998ACA}|ProductApp.csproj|solutionrelative:views\\account\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C25669B5-EEFE-4B03-BD20-E8FCE2998ACA}|ProductApp.csproj|d:\\dot-net project\\productapp\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{C25669B5-EEFE-4B03-BD20-E8FCE2998ACA}|ProductApp.csproj|solutionrelative:views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C25669B5-EEFE-4B03-BD20-E8FCE2998ACA}|ProductApp.csproj|d:\\dot-net project\\productapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C25669B5-EEFE-4B03-BD20-E8FCE2998ACA}|ProductApp.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{C25669B5-EEFE-4B03-BD20-E8FCE2998ACA}|ProductApp.csproj|d:\\dot-net project\\productapp\\views\\profile\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C25669B5-EEFE-4B03-BD20-E8FCE2998ACA}|ProductApp.csproj|solutionrelative:views\\profile\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C25669B5-EEFE-4B03-BD20-E8FCE2998ACA}|ProductApp.csproj|d:\\dot-net project\\productapp\\views\\profile\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C25669B5-EEFE-4B03-BD20-E8FCE2998ACA}|ProductApp.csproj|solutionrelative:views\\profile\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C25669B5-EEFE-4B03-BD20-E8FCE2998ACA}|ProductApp.csproj|d:\\dot-net project\\productapp\\models\\profiletab.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -42,41 +66,105 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": 11,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "EmailService.cs",
+              "DocumentMoniker": "D:\\Dot-Net Project\\ProductApp\\Services\\EmailService.cs",
+              "RelativeDocumentMoniker": "Services\\EmailService.cs",
+              "ToolTip": "D:\\Dot-Net Project\\ProductApp\\Services\\EmailService.cs",
+              "RelativeToolTip": "Services\\EmailService.cs",
+              "ViewState": "AgIAADIAAAAAAAAAAAAQwEQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-17T06:28:15.35Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ProductApp",
+              "DocumentMoniker": "D:\\Dot-Net Project\\ProductApp\\ProductApp.csproj",
+              "RelativeDocumentMoniker": "ProductApp.csproj",
+              "ToolTip": "D:\\Dot-Net Project\\ProductApp\\ProductApp.csproj*",
+              "RelativeToolTip": "ProductApp.csproj*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-12-17T06:26:22.006Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "_Layout.cshtml",
-              "DocumentMoniker": "D:\\Dot-Net Project\\ProductApp\\Views\\Shared\\_Layout.cshtml",
-              "RelativeDocumentMoniker": "Views\\Shared\\_Layout.cshtml",
-              "ToolTip": "D:\\Dot-Net Project\\ProductApp\\Views\\Shared\\_Layout.cshtml",
-              "RelativeToolTip": "Views\\Shared\\_Layout.cshtml",
-              "ViewState": "AgIAAP4AAAAAAAAAAAAAAAsBAAAMAAAAAAAAAA==",
+              "DocumentIndex": 6,
+              "Title": "Register.cshtml",
+              "DocumentMoniker": "D:\\Dot-Net Project\\ProductApp\\Views\\Account\\Register.cshtml",
+              "RelativeDocumentMoniker": "Views\\Account\\Register.cshtml",
+              "ToolTip": "D:\\Dot-Net Project\\ProductApp\\Views\\Account\\Register.cshtml",
+              "RelativeToolTip": "Views\\Account\\Register.cshtml",
+              "ViewState": "AgIAAI4AAAAAAAAAAAAAwKYAAABGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-15T10:49:11.832Z",
+              "WhenOpened": "2025-12-17T06:18:03.891Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "D:\\Dot-Net Project\\ProductApp\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AccountController.cs",
+              "ToolTip": "D:\\Dot-Net Project\\ProductApp\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "Controllers\\AccountController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-17T06:17:55.491Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\Dot-Net Project\\ProductApp\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "D:\\Dot-Net Project\\ProductApp\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-12-17T06:15:50.195Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "User.cs",
+              "DocumentMoniker": "D:\\Dot-Net Project\\ProductApp\\Models\\User.cs",
+              "RelativeDocumentMoniker": "Models\\User.cs",
+              "ToolTip": "D:\\Dot-Net Project\\ProductApp\\Models\\User.cs",
+              "RelativeToolTip": "Models\\User.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAA1wCcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-15T11:21:38.415Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
               "Title": "Index.cshtml",
               "DocumentMoniker": "D:\\Dot-Net Project\\ProductApp\\Views\\Profile\\Index.cshtml",
               "RelativeDocumentMoniker": "Views\\Profile\\Index.cshtml",
               "ToolTip": "D:\\Dot-Net Project\\ProductApp\\Views\\Profile\\Index.cshtml",
               "RelativeToolTip": "Views\\Profile\\Index.cshtml",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAAACIAAAA7AAAAAAAAAA==",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAACIAAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-15T10:48:33.95Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-15T10:48:33.95Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 12,
               "Title": "TestSave.cshtml",
               "DocumentMoniker": "D:\\Dot-Net Project\\ProductApp\\Views\\Profile\\TestSave.cshtml",
               "RelativeDocumentMoniker": "Views\\Profile\\TestSave.cshtml",
@@ -84,12 +172,11 @@
               "RelativeToolTip": "Views\\Profile\\TestSave.cshtml",
               "ViewState": "AgIAAAYAAAAAAAAAAAAAABMAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-15T10:07:45.094Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-15T10:07:45.094Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 11,
               "Title": "ProfileViewModel.cs",
               "DocumentMoniker": "D:\\Dot-Net Project\\ProductApp\\Models\\ProfileViewModel.cs",
               "RelativeDocumentMoniker": "Models\\ProfileViewModel.cs",
@@ -97,12 +184,11 @@
               "RelativeToolTip": "Models\\ProfileViewModel.cs",
               "ViewState": "AgIAACQAAAAAAAAAAAAowDEAAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-15T10:01:16.641Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-15T10:01:16.641Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 10,
               "Title": "ProfileTab.cs",
               "DocumentMoniker": "D:\\Dot-Net Project\\ProductApp\\Models\\ProfileTab.cs",
               "RelativeDocumentMoniker": "Models\\ProfileTab.cs",
@@ -110,12 +196,11 @@
               "RelativeToolTip": "Models\\ProfileTab.cs",
               "ViewState": "AgIAACkAAAAAAAAAAAAAwD8AAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-15T10:01:08.696Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-15T10:01:08.696Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\Dot-Net Project\\ProductApp\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
@@ -129,6 +214,18 @@
             {
               "$type": "Document",
               "DocumentIndex": 7,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "D:\\Dot-Net Project\\ProductApp\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "D:\\Dot-Net Project\\ProductApp\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAADoBAAAAAAAAAAAAAEMBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-15T10:49:11.832Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
               "Title": "ProfileController.cs",
               "DocumentMoniker": "D:\\Dot-Net Project\\ProductApp\\Controllers\\ProfileController.cs",
               "RelativeDocumentMoniker": "Controllers\\ProfileController.cs",
@@ -136,12 +233,11 @@
               "RelativeToolTip": "Controllers\\ProfileController.cs",
               "ViewState": "AgIAABMBAAAAAAAAAAAqwFQBAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-15T09:07:14.909Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-15T09:07:14.909Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 9,
               "Title": "Edit.cshtml",
               "DocumentMoniker": "D:\\Dot-Net Project\\ProductApp\\Views\\Profile\\Edit.cshtml",
               "RelativeDocumentMoniker": "Views\\Profile\\Edit.cshtml",
@@ -149,8 +245,7 @@
               "RelativeToolTip": "Views\\Profile\\Edit.cshtml",
               "ViewState": "AgIAABIAAAAAAAAAAAAAACcAAABRAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-15T09:07:44.131Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-15T09:07:44.131Z"
             }
           ]
         }
